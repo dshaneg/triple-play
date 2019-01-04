@@ -1,3 +1,5 @@
 {
-  "message": "You're bona fide in the cert environment."
+  "appConfig": {
+    "message": "You're bona fide in the cert environment."
+  }
 }
