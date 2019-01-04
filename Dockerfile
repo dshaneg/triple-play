@@ -22,7 +22,7 @@ FROM dependencies AS build
 COPY auto auto/
 COPY config config/
 COPY src src/
-# COPY .eslintrc.yaml ./
+COPY .eslintrc.yaml ./
 # If using a compile language, we would compile here
 
 # Running the build script in the running container so we can capture the output files in the host via volume mount
