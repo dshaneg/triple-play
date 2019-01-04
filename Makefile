@@ -29,6 +29,10 @@ play:
 		--mount $(mount-def) \
 		$(image-name):build
 
+# eventually will execute publish script in the workspace container
+deploy:
+	auto/deploy.sh
+
 # execute the release container locally
 # assumes build has already run--doesn't force a new one
 run:

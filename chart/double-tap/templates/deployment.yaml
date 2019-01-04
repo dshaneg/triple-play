@@ -1,16 +1,18 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-double-tap
+  name: {{ .Release.Name }}
 spec:
   replicas: 3
   selector:
     matchLabels:
       app: double-tap
+      channel: {{ .Values.channel }}
   template:
     metadata:
       labels:
         app: double-tap
+        channel: {{ .Values.channel }}
     spec:
       containers:
       - image: {{ .Values.imageRegistry }}/double-tap:{{ .Values.dockerTag }}
@@ -40,4 +42,4 @@ spec:
       volumes:
       - name: config
         configMap:
-          name: {{ .Release.Name }}-double-tap-config
+          name: {{ .Release.Name }}-config

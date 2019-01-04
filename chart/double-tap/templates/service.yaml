@@ -10,3 +10,4 @@ spec:
     targetPort: http
   selector:
     app: double-tap
+    channel: {{ .Values.channel }}
