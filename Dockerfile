@@ -1,6 +1,11 @@
 # ---- Base Node ----
 FROM node:10.15.0-jessie AS base
 
+# need to install helm and kubectl
+# would rather do this later in a specific deploy image,
+# but to keep builds fast, need to do it early.
+# It won't go into the release image either way
+
 # Create app directory
 WORKDIR /app
 
@@ -20,6 +25,7 @@ RUN npm install
 FROM dependencies AS build
 
 COPY auto auto/
+COPY chart chart/
 COPY config config/
 COPY src src/
 COPY .eslintrc.yaml ./
