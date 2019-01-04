@@ -1,0 +1,20 @@
+{
+  "name": "double-tap",
+  "version": "1.0.0",
+  "description": "Proof of concept for creating a \"workspace\" container to be published along with the application's main container.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo testing!",
+    "lint": "echo linting!",
+    "start": "node src/index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dshaneg/double-tap.git"
+  },
+  "author": "Shane Gibbons <shane.gibbons@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bunyan": "^1.8.12"
+  }
+}
