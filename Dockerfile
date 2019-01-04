@@ -52,4 +52,4 @@ COPY --from=prerelease /app/src ./src/
 
 EXPOSE 80
 
-ENTRYPOINT [ "node", "bin/index.js" ]
+ENTRYPOINT [ "node", "src/index.js" ]

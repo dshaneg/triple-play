@@ -1,0 +1,38 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-double-tap
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: double-tap
+  template:
+    metadata:
+      labels:
+        app: double-tap
+    spec:
+      containers:
+      - image: {{ .Values.imageRegistry }}/double-tap:{{ .Values.dockerTag }}
+        name: web
+        ports:
+        - containerPort: 80
+          name: http
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+        resources:
+          requests:
+            cpu: 50m
+            memory: 15Mi
+          limits:
+            cpu: 100m
+            memory: 30Mi
+
+

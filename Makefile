@@ -20,7 +20,8 @@ publish:
 	auto/publish.sh
 
 # enter a bash shell in the build container
-play: dbuild-build
+# assumes build has already run--doesn't force a new one
+play:
 	docker run \
 		--rm \
 		-it \
@@ -29,12 +30,13 @@ play: dbuild-build
 		$(image-name):build
 
 # execute the release container locally
-run: dbuild-release
+# assumes build has already run--doesn't force a new one
+run:
 	docker run \
 		--rm \
-		--sig-proxy=true \
+		-d \
 		--publish 80:80 \
-		--mount type=bind,source=${PWD}/configurations/local.json,target=//app/config/config.json \
+		--mount type=bind,source=${PWD}/config/local.json,target=//app/config/config.json \
 		$(image-name)
 
 # build the docker images
