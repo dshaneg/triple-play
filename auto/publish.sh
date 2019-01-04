@@ -6,8 +6,8 @@ set -e
 # BUT, most developers will not have permissions to push!
 # though the versioned package will be created in the publish image
 if [ -f ${APP_VERSION} ]; then
-  echo "WARNING: APP_VERSION environment variable not set. Defaulting to '0.0.0'."
-  APP_VERSION=0.0.0
+  echo "WARNING: APP_VERSION environment variable not set. Defaulting to 'latest'. Robots should set it to a valid SemVer string."
+  APP_VERSION=latest
 fi
 
 echo "Tagging..."
