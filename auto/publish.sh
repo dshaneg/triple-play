@@ -1,14 +1,12 @@
 #!/bin/bash
-set -e
+
+set -eo pipefail
 
 # If running locally, we won't necessarily have the APP_VERSION variable set,
 # But the build machine should.
 # BUT, most developers will not have permissions to push!
 # though the versioned package will be created in the publish image
-if [ -f ${APP_VERSION} ]; then
-  echo "WARNING: APP_VERSION environment variable not set. Defaulting to 'latest'. Robots should set it to a valid SemVer string."
-  APP_VERSION=latest
-fi
+source auto/default-app-version.sh
 
 echo "Tagging..."
 CONTAINER_NAME=double-tap

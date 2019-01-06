@@ -1,2 +1,11 @@
+# The following properties are overridden by the deploy.sh script:
+#
+# docker:
+#  tag
+# meta:
+#  instance
+#  stage
+#  owner
+
 appConfig:
   message: "You're bona fide in the cert environment."

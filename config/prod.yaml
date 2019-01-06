@@ -1,2 +1,17 @@
+# The following properties are overridden by the deploy.sh script:
+#
+# docker:
+#  tag
+# meta:
+#  instance
+#  stage
+#  owner
+
+infra:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 30Mi
+
 appConfig:
   message: "PRODUCTION!!"

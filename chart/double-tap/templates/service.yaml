@@ -2,12 +2,22 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Release.Name }}-service
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Values.meta.instance }}
+    app.kubernetes.io/version: {{ .Values.docker.tag }}
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: {{ .Chart.Name }}
+    app.kubernetes.io/managed-by: helm
+    stage: {{ .Values.meta.stage }}
+    owner: {{ .Values.meta.owner}}
 spec:
   type: ClusterIP
   ports:
   - name: http
-    port: 80
+    port: {{ .Values.infra.servicePort }}
     targetPort: http
   selector:
-    app: double-tap
-    channel: {{ .Values.channel }}
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Values.meta.instance }}

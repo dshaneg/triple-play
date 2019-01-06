@@ -1,2 +1,24 @@
-imageRegistry: "dshaneg"
-dockerTag: "1.14.8"
+docker:
+  registry: dshaneg
+  image: double-tap
+  tag: latest
+
+meta:
+  instance: default
+  stage: default
+  owner: unknown
+
+infra:
+  servicePort: 80
+  resources:
+    requests:
+      cpu: 50m
+      memory: 15Mi
+    limits:
+      cpu: 100m
+      memory: 30Mi
+
+# The contents of this section will be created as a config.json file for the application to read
+appConfig:
+  message: Hello world!
+  port: 80

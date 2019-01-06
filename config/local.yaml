@@ -1,4 +1,9 @@
-appConfig:
-  message: "default config loaded...you probably don't want this."
+# The following properties are overridden by the deploy.sh script:
+#
+# docker:
+#  tag
+# meta:
+#  instance
+#  stage
+#  owner
 
-dockerTag: latest

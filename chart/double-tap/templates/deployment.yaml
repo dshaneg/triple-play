@@ -2,23 +2,40 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Values.meta.instance }}
+    app.kubernetes.io/version: {{ .Values.docker.tag }}
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: {{ .Chart.Name }}
+    app.kubernetes.io/managed-by: helm
+    stage: {{ .Values.meta.stage }}
+    owner: {{ .Values.meta.owner}}
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: double-tap
-      channel: {{ .Values.channel }}
+      app.kubernetes.io/name: {{ .Chart.Name }}
+      app.kubernetes.io/instance: {{ .Values.meta.instance }}
   template:
     metadata:
+      namespace: {{ .Release.Namespace }}
       labels:
-        app: double-tap
-        channel: {{ .Values.channel }}
+        app.kubernetes.io/name: {{ .Chart.Name }}
+        app.kubernetes.io/instance: {{ .Values.meta.instance }}
+        app.kubernetes.io/version: {{ .Values.docker.tag }}
+        app.kubernetes.io/component: server
+        app.kubernetes.io/part-of: {{ .Chart.Name }}
+        app.kubernetes.io/managed-by: helm
+        stage: {{ .Values.meta.stage }}
+        owner: {{ .Values.meta.owner}}
     spec:
       containers:
-      - image: {{ .Values.imageRegistry }}/double-tap:{{ .Values.dockerTag }}
+      - image: {{ .Values.docker.registry }}/{{ .Values.docker.image }}:{{ .Values.docker.tag }}
         name: web
         ports:
-        - containerPort: 80
+        - containerPort: {{ .Values.appConfig.port }}
           name: http
         volumeMounts:
         - name: config
@@ -26,20 +43,21 @@ spec:
         livenessProbe:
           httpGet:
             path: /
-            port: 80
+            port: {{ .Values.appConfig.port }}
           initialDelaySeconds: 3
         readinessProbe:
           httpGet:
             path: /
-            port: 80
+            port: {{ .Values.appConfig.port }}
         resources:
           requests:
-            cpu: 50m
-            memory: 15Mi
+            cpu: {{ .Values.infra.resources.requests.cpu }}
+            memory: {{ .Values.infra.resources.requests.memory }}
           limits:
-            cpu: 100m
-            memory: 30Mi
+            cpu: {{ .Values.infra.resources.limits.cpu }}
+            memory: {{ .Values.infra.resources.limits.memory }}
       volumes:
       - name: config
         configMap:
           name: {{ .Release.Name }}-config
+
