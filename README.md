@@ -14,6 +14,20 @@ The workspace container can be used to run deploy and test scripts against the m
 make build
 ```
 
+## Running the application locally (not in k8s)
+
+Once built, you can run the application in the container.
+
+```sh
+make run
+```
+
+This will start the application and leave the container running in the background. You'll have to stop it before you can run it again.
+
+```sh
+make kill
+```
+
 ## Publishing the docker images
 
 On a build server, need to set environment variable APP_VERSION to a valid semantic version value. This will become the tag of the docker image as well as the version of the helm chart.
