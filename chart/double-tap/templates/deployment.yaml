@@ -13,7 +13,7 @@ metadata:
     stage: {{ .Values.meta.stage }}
     owner: {{ .Values.meta.owner}}
 spec:
-  replicas: 3
+  replicas: {{ .Values.infra.scaling.startReplicas }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ .Chart.Name }}

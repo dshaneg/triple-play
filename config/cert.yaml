@@ -7,5 +7,16 @@
 #  stage
 #  owner
 
+infra:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 30Mi
+  scaling:
+    startReplicas: 3
+    minReplicas: 2
+    maxReplicas: 5
+    targetCpuUtilization: 70
+
 appConfig:
   message: "You're bona fide in the cert environment."

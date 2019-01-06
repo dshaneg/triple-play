@@ -1,0 +1,27 @@
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Release.Name }}-hpa
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Values.meta.instance }}
+    app.kubernetes.io/version: {{ .Values.docker.tag }}
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: {{ .Chart.Name }}
+    app.kubernetes.io/managed-by: helm
+    stage: {{ .Values.meta.stage }}
+    owner: {{ .Values.meta.owner}}
+spec:
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: {{ .Release.Name }}
+  minReplicas: {{ .Values.infra.scaling.minReplicas }}
+  maxReplicas: {{ .Values.infra.scaling.maxReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: {{ .Values.infra.scaling.targetCpuUtilization }}

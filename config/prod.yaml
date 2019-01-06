@@ -12,6 +12,11 @@ infra:
     requests:
       cpu: 100m
       memory: 30Mi
+  scaling:
+    startReplicas: 3
+    minReplicas: 2
+    maxReplicas: 10
+    targetCpuUtilization: 70
 
 appConfig:
-  message: "PRODUCTION!!"
+  message: "Hello Production!"
