@@ -11,13 +11,13 @@ build: dbuild-build dbuild-release
 		--rm \
 		--mount $(mount-def) \
 		$(image-name):build \
-		auto/build.sh
+		abin/build.sh
 
 # publishes the build and release images to the registry via the publish.sh script
 # executes the publish script from the host--where the containers were built!
 # no dependencies--assumes build rule has been run but doesn't force it
 publish: set-executable
-	auto/publish.sh
+	abin/publish.sh
 
 # enter a bash shell in the build container
 # assumes build has already run--doesn't force a new one
@@ -31,7 +31,7 @@ play:
 
 # eventually will execute publish script in the workspace container
 deploy: set-executable
-	auto/deploy.sh
+	abin/deploy.sh
 
 # execute the release container locally
 # assumes build has already run--doesn't force a new one
@@ -39,9 +39,14 @@ run:
 	docker run \
 		--rm \
 		-d \
-		--publish 80:80 \
-		--mount type=bind,source=${PWD}/config/local.json,target=//app/config/config.json \
+		--name double-tap \
+		--publish 8008:80 \
+		--mount type=bind,source=${PWD}/config/config.json,target=//app/config/config.json \
 		$(image-name)
+
+# kill the container started by the run rule
+kill:
+	docker kill double-tap
 
 # build the docker images
 
@@ -69,6 +74,6 @@ deep-clean: clean
 	rm -rf node_modules
 
 set-executable:
-	chmod 755 ./auto/*.sh
+	chmod 755 ./abin/*.sh
 
 
