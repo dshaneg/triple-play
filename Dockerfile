@@ -24,15 +24,14 @@ RUN npm install
 # ---------------
 FROM dependencies AS build
 
-COPY auto auto/
-COPY chart chart/
-COPY config config/
-COPY src src/
 COPY .eslintrc.yaml ./
+COPY abin abin/
+COPY config/config.json config/config.json
+COPY src src/
 # If using a compile language, we would compile here
 
 # Running the build script in the running container so we can capture the output files in the host via volume mount
-CMD ["./auto/build.sh"]
+CMD ["./abin/build.sh"]
 
 # ----------------
 # -- Prerelease --
