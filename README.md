@@ -4,13 +4,9 @@ Proof of concept for creating a "workspace" container to be published along with
 
 The workspace container can be used to run deploy and test scripts against the main container.
 
-## Notes
+## To Do
 
-* chart version doesn't matter since it is deployed with the build container. don't even have to publish it
-* is there a better way to include files dynamically in configmap? This way forced me to add a top level container entry in each file
 * still need to helm install/upgrade from the build image. Will require installing kubectl and helm in the image. Also will need creds to publish
-* deploy using `helm upgrade -f config/${ENV}.json {release-name} chart/double-tap
-* need to figure out how to define the release name instead of getting the random one
 
 ## Building the application
 
@@ -20,7 +16,9 @@ make build
 
 ## Publishing the docker images
 
-On a build server, you need to make sure the environment varialbe `STAGE` is set to a value that matches one of the filenames in the config folder, excluding the suffix: (e.g. cert, local, prod). When running the build locally, the build will use version 0.0.0.
+On a build server, need to set environment variable APP_VERSION to a valid semantic version value. This will become the tag of the docker image as well as the version of the helm chart.
+
+If the APP_VERSION variable is not set (as when running the build locally), the build will use version 0.0.0, and 'latest' for the docker image tag.
 
 ```sh
 make publish
@@ -28,7 +26,11 @@ make publish
 
 ## Deploying the application
 
-TODO: Not yet working from the workspace container. Have to run it locally.
+A build server should have the `APP_VERSION` environment variable set as for the Publish step.
+
+On a build server, you need to make sure the environment variable `STAGE` is set to a value that matches one of the filenames in the config folder, excluding the suffix: (e.g. cert, local, prod).
+
+Both variables use default values if not set, but any automation should explicitly set values for these variables--the defaults are intended for local development.
 
 ```sh
 make deploy
