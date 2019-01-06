@@ -63,6 +63,7 @@ ensure-logs:
 
 clean:
 	rm -rf build_logs
+	rm -f double-tap-*.tgz
 
 deep-clean: clean
 	rm -rf node_modules
