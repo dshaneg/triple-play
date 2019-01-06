@@ -11,9 +11,10 @@ kubectl create -f util/curlpod.yaml
 and then execute against the service endpoint with kubectl exec.
 
 ```sh
-# get the cluster-ip of your service by executing
-# also, just replace $(id -un) with your username--you can probably type it quicker
-kubectl get services double-tap-local-$(id -un)
+# get the cluster-ip of your service by executing this line
+# (also, just replace $(id -un) with your username--you can probably type it quicker)
+kubectl get services double-tap-local-$(id -un)-service
+
 kubectl exec -it curl curl http://{cluster-ip-of-your-service}
 ```
 
