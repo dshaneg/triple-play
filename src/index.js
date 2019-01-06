@@ -1,6 +1,9 @@
 const http = require('http');
 const os = require('os');
+const bunyan = require('bunyan');
 const config = require('../config/config.json');
+
+const log = bunyan.createLogger({ name: 'double-tap' });
 
 const server = http.createServer((request, response) => {
   response.writeHead(200, { 'Content-Type': 'text/plain' });
@@ -9,4 +12,4 @@ const server = http.createServer((request, response) => {
 
 server.listen(config.port);
 
-console.log('Server running at http://localhost:%d', config.port);
+log.info('Server running at http://localhost:%d', config.port);
