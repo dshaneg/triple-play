@@ -7,7 +7,6 @@ const server = http.createServer((request, response) => {
   response.end(`${config.message} on host ${os.hostname()}\n`);
 });
 
-const port = 80;
-server.listen(port);
+server.listen(config.port);
 
-console.log('Server running at http://localhost:%d', port);
+console.log('Server running at http://localhost:%d', config.port);
