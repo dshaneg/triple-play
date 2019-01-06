@@ -1,0 +1,8 @@
+# The following properties are overridden by the deploy.sh script:
+#
+# docker:
+#  tag
+# meta:
+#  instance
+#  stage
+#  owner
