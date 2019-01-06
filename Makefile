@@ -16,7 +16,7 @@ build: dbuild-build dbuild-release
 # publishes the build and release images to the registry via the publish.sh script
 # executes the publish script from the host--where the containers were built!
 # no dependencies--assumes build rule has been run but doesn't force it
-publish:
+publish: set-executable
 	auto/publish.sh
 
 # enter a bash shell in the build container
@@ -30,7 +30,7 @@ play:
 		$(image-name):build
 
 # eventually will execute publish script in the workspace container
-deploy:
+deploy: set-executable
 	auto/deploy.sh
 
 # execute the release container locally
