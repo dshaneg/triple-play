@@ -6,7 +6,7 @@ set -eo pipefail
 # But the build machine should.
 # BUT, most developers will not have permissions to push!
 # though the versioned package will be created in the publish image
-source auto/default-app-version.sh
+source abin/default-app-version.sh
 
 echo "Tagging..."
 CONTAINER_NAME=double-tap
