@@ -33,6 +33,7 @@ fi
 set -x
 
 helm upgrade --install \
+  --wait \
   --namespace ${NAMESPACE} \
   --values config/${STAGE}.yaml \
   --set docker.tag=${APP_VERSION} \
