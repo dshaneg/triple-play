@@ -1,17 +1,16 @@
 .PHONY: build publish play run \
-		dbuild-build dbuild-release \
+		dbuild-build dbuild-deployer dbuild-release \
 		ensure-logs clean deep-clean set-executable
 
-mount-def = type=bind,source=${PWD}/build_logs,target=//app/build_logs
+# mount-def = type=bind,source=${PWD}/build_logs,target=//app/build_logs
 image-name = double-tap
 
-# execute the build step in the build container
-build: dbuild-build dbuild-release
-	docker run \
-		--rm \
-		--mount $(mount-def) \
-		$(image-name):build \
-		abin/build.sh
+# execute the application build as part of building the image
+# then copy the build logs from the container to the host
+build: dbuild-build dbuild-deployer dbuild-release
+	docker create --name double-tap-copy-logs double-tap:build
+	docker cp double-tap-copy-logs:/app/build_logs .
+	docker rm -v double-tap-copy-logs
 
 # publishes the build and release images to the registry via the publish.sh script
 # executes the publish script from the host--where the containers were built!
@@ -54,6 +53,12 @@ dbuild-build: ensure-logs set-executable
 	docker build \
 		--target build \
 		-t $(image-name):build \
+		.
+
+dbuild-deployer: ensure-logs set-executable
+	docker build \
+		--target deployer \
+		-t $(image-name):deployer \
 		.
 
 dbuild-release: ensure-logs set-executable
