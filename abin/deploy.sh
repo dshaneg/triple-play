@@ -32,6 +32,8 @@ fi
 
 set -x
 
+RELEASE=${APP_NAME}-${INSTANCE}
+
 helm upgrade --install \
   --wait \
   --namespace ${NAMESPACE} \
@@ -40,5 +42,7 @@ helm upgrade --install \
   --set meta.stage=${STAGE} \
   --set meta.instance=${INSTANCE} \
   --set meta.owner=${OWNER} \
-  ${APP_NAME}-${INSTANCE} \
+  ${RELEASE} \
   double-tap-${CHART_VERSION}.tgz
+
+helm test ${RELEASE} --cleanup

@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-config-file-test
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+  - name: {{ .Release.Name }}-config-file-test
+    image: radial/busyboxplus:curl
+    command: ['echo']
+    args: ['hello']
+    resources:
+      limits:
+        cpu: 50m
+        memory: 10Mi
+  restartPolicy: Never
+
+# trying to convert the known values into the env vars that get injected into the pods.
+# I think it might be better to pubish a third container that contains the tests and use that...
+# OR could possibly use the deployer container since it already has the tests
+#
+#     command: ['sh']
+#     args: 
+#     - '-c'
+#     - 'curl'
+#     - '$(echo "{{ .Release.Name }}-service" | tr [a-z] [A-Z] | tr [-] [_]):{{ .Values.infra.servicePort }}" | tr [a-z] [A-Z])'
+
+# echo double-tap-aat-service | tr [a-z] [A-Z]
+# DOUBLE_TAP_AAT_SERVICE_SERVICE_HOST=10.106.212.58
+# DOUBLE_TAP_AAT_SERVICE_SERVICE_PORT=80
