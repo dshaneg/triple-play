@@ -6,7 +6,15 @@ The workspace container can be used to run deploy and test scripts against the m
 
 ## To Do
 
-* still need to helm install/upgrade from the build image. Will require installing kubectl and helm in the image. Also will need creds to publish
+* proper smoke test (there's a dummy in place now)
+* proper automated acceptance tests on a running container
+* automated rollback if smoke fails
+* delete deployment for volatile stages (aat, etc)
+* include non-helm deployment steps (e.g. s3 bucket)
+* alternate example with pieces fully broken apart into separate repos
+  * app
+  * chart
+  * config/deploy?
 
 ## Building the application
 
@@ -45,6 +53,8 @@ A build server should have the `APP_VERSION` environment variable set as for the
 On a build server, you need to make sure the environment variable `STAGE` is set to a value that matches one of the filenames in the config folder, excluding the suffix: (e.g. cert, local, prod).
 
 Both variables use default values if not set, but any automation should explicitly set values for these variables--the defaults are intended for local development.
+
+__BE CAREFUL__ when running this step locally if you have kubernetes credentials to any higher environment clusters (like production). Make sure your current context is set to a local or dev cluster. The process copies your kube config into the deployer container and lets it fly.
 
 ```sh
 make deploy
