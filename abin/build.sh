@@ -2,7 +2,7 @@
 
 set -eo pipefail
 
-source abin/ensure-env-vars.sh
+source abin/ensure-version-vars.sh
 
 echo "Linting nodejs source..."
 npm run lint --silent | tee build_logs/lint.log

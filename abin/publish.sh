@@ -6,7 +6,7 @@ set -eo pipefail
 # But the build machine should.
 # BUT, most developers will not have permissions to push!
 # though the versioned package will be created in the publish image
-source abin/ensure-env-vars.sh
+source abin/ensure-version-vars.sh
 
 echo "Tagging..."
 CONTAINER_NAME=double-tap

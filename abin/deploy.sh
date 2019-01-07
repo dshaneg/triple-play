@@ -11,7 +11,7 @@ OWNER=dshaneg # probably should drive this value from the robot
 APP_NAME=double-tap
 
 # set APP_VERSION to default value if not set already--robots should set this value before calling
-source abin/ensure-env-vars.sh
+source abin/ensure-version-vars.sh
 
 # if you're installing in a local stage (i.e. from your box),
 # we'll include your user name in the helm release name
