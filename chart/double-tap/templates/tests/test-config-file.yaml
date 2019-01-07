@@ -6,7 +6,7 @@ metadata:
     "helm.sh/hook": test-success
 spec:
   containers:
-  - name: {{ .Release.Name }}-config-file-test
+  - name: test
     image: radial/busyboxplus:curl
     command: ['echo']
     args: ['hello']
