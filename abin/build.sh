@@ -18,4 +18,4 @@ echo "Packaging helm chart..."
 # however, packaging it with the --app-version option populates the app version column
 # in the helm list command with the current value of the APP_VERSION environment variable.
 # In our case, it'd be nice if we could set an app-version option on helm upgrade...
-helm package --version ${CHART_VERSION} --app-version ${APP_VERSION} chart/double-tap
+helm package --version ${CHART_VERSION} --app-version ${APP_VERSION} chart/double-tap | tee build_logs/helmlint.log

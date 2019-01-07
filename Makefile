@@ -2,12 +2,11 @@
 		dbuild-build dbuild-deployer dbuild-release \
 		ensure-logs clean deep-clean set-executable
 
-# mount-def = type=bind,source=${PWD}/build_logs,target=//app/build_logs
 image-name = double-tap
 
 # execute the application build as part of building the image
 # then copy the build logs from the container to the host
-build: dbuild-build dbuild-deployer dbuild-release
+build: clean dbuild-build dbuild-deployer dbuild-release
 	docker create --name double-tap-copy-logs double-tap:build
 	docker cp double-tap-copy-logs:/app/build_logs .
 	docker rm -v double-tap-copy-logs
@@ -25,12 +24,19 @@ play:
 		--rm \
 		-it \
 		--entrypoint //bin/bash \
-		--mount $(mount-def) \
 		$(image-name):build
 
-# eventually will execute publish script in the workspace container
+# execute deploy script in the deployer container
 deploy: set-executable
-	abin/deploy.sh
+	# would need a step to retrieve kubernetes config file from a secret store
+	cp ~/.kube/config ./.kube/config
+	docker run \
+		--rm \
+		-it \
+		-e STAGE \
+		-e APP_VERSION \
+		--mount type=bind,source=${PWD}/.kube,target=//root/.kube \
+		double-tap:deployer
 
 # execute the release container locally
 # assumes build has already run--doesn't force a new one
@@ -52,17 +58,20 @@ kill:
 dbuild-build: ensure-logs set-executable
 	docker build \
 		--target build \
+		--build-arg APP_VERSION \
 		-t $(image-name):build \
 		.
 
 dbuild-deployer: ensure-logs set-executable
 	docker build \
 		--target deployer \
+		--build-arg APP_VERSION \
 		-t $(image-name):deployer \
 		.
 
 dbuild-release: ensure-logs set-executable
 	docker build \
+		--build-arg APP_VERSION \
 		-t $(image-name) \
 		.
 
@@ -73,6 +82,7 @@ ensure-logs:
 
 clean:
 	rm -rf build_logs
+	rm -rf .kube
 	rm -f double-tap-*.tgz
 
 deep-clean: clean
