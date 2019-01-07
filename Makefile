@@ -29,6 +29,7 @@ play:
 # execute deploy script in the deployer container
 deploy: set-executable
 	# would need a step to retrieve kubernetes config file from a secret store
+	mkdir -p .kube
 	cp ~/.kube/config ./.kube/config
 	docker run \
 		--rm \
