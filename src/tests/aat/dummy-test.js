@@ -1,5 +1,5 @@
 const { expect } = require('chai');
-const Incrementor = require('../../lib/incrementor');
+const Incrementor = require('../../app/lib/incrementor');
 
 describe('Incrementor', () => {
   describe('Increment', () => {

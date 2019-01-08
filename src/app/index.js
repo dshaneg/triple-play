@@ -1,7 +1,7 @@
 const http = require('http');
 const os = require('os');
 const bunyan = require('bunyan');
-const config = require('../config/config.json');
+const config = require('../../config/config.json');
 
 const log = bunyan.createLogger({ name: 'double-tap' });
 

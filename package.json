@@ -4,9 +4,9 @@
   "description": "Proof of concept for creating a \"workspace\" container to be published along with the application's main container.",
   "main": "src/index.js",
   "scripts": {
-    "test": "mocha --recursive src/tests/unit",
+    "test": "mocha --recursive src/unit-tests",
     "lint": "eslint src",
-    "start": "node src/index"
+    "start": "node src/app/index"
   },
   "repository": {
     "type": "git",

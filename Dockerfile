@@ -51,15 +51,6 @@ RUN ./abin/build.sh
 ENTRYPOINT ["bash"]
 
 # ----------------------------------------------------------------------------------------------------------
-# -- Prerelease
-# ----------------------------------------------------------------------------------------------------------
-FROM build as prerelease
-
-# don't want to prune the build image, because I need to run tests in it.
-# don't want to prune the release image, since alpine is missing some tools to do it with
-RUN npm prune --production
-
-# ----------------------------------------------------------------------------------------------------------
 # -- Deploy (we'll publish this one)
 # ----------------------------------------------------------------------------------------------------------
 # contains the deploy script and the helm chart package
@@ -113,6 +104,15 @@ COPY --from=build /app/src/tests ./src/tests/
 CMD [ "bash" ]
 
 # ----------------------------------------------------------------------------------------------------------
+# -- Prerelease
+# ----------------------------------------------------------------------------------------------------------
+FROM build as prerelease
+
+# don't want to prune the build image, because I need to run tests in it.
+# don't want to prune the release image, since alpine is missing some tools to do it with
+RUN npm prune --production
+
+# ----------------------------------------------------------------------------------------------------------
 # -- Release (we'll publish this one)
 # ----------------------------------------------------------------------------------------------------------
 FROM node:10.15.0-alpine AS release
@@ -127,4 +127,4 @@ COPY --from=prerelease /app/src ./src/
 
 # exposes a port (default 80) but it is configurable
 
-ENTRYPOINT [ "node", "src/index.js" ]
+ENTRYPOINT [ "node", "src/app/index.js" ]
