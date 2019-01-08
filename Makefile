@@ -37,14 +37,12 @@ playtest:
 # execute deploy script in the deploy container
 deploy: set-executable
 	# would need a step to retrieve kubernetes config file from a secret store
-	mkdir -p .kube
-	cp ~/.kube/config ./.kube/config
 	docker run \
 		--rm \
 		-it \
 		-e STAGE \
 		-e APP_VERSION \
-		--mount type=bind,source=${PWD}/.kube,target=//root/.kube \
+		--mount type=bind,source=${HOME}/.kube,target=//root/.kube \
 		double-tap:deploy
 
 # execute the release container locally
