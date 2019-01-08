@@ -2,7 +2,8 @@
 		dbuild-build dbuild-deploy dbuild-test dbuild-release \
 		ensure-logs clean deep-clean set-executable
 
-image-name = double-tap
+image-name = triple-play
+build-container = $(image-name)-copy-logs
 
 ################
 # Pipeline rules
@@ -11,9 +12,9 @@ image-name = double-tap
 # execute the application build as part of building the image
 # then copy the build logs from the container to the host
 build: clean dbuild-build dbuild-deploy dbuild-test dbuild-release
-	docker create --name double-tap-copy-logs double-tap:build
-	docker cp double-tap-copy-logs:/app/build_logs .
-	docker rm -v double-tap-copy-logs
+	docker create --name $(build-container) $(image-name):build
+	docker cp $(build-container):/app/build_logs .
+	docker rm -v $(build-container)
 	@echo "Build logs copied to build_logs directory."
 
 # publishes the build and release images to the registry via the publish.sh script
@@ -31,7 +32,7 @@ deploy: set-executable
 		-e STAGE \
 		-e APP_VERSION \
 		--mount type=bind,source=${HOME}/.kube,target=//root/.kube \
-		double-tap:deploy
+		$(image-name):deploy
 
 ######################
 # Manual testing rules
@@ -59,14 +60,14 @@ run:
 	docker run \
 		--rm \
 		-d \
-		--name double-tap \
+		--name $(image-name) \
 		--publish 8008:80 \
 		--mount type=bind,source=${PWD}/config/config.json,target=//app/config/config.json \
 		$(image-name):latest
 
 # kill the container started by the run rule
 kill:
-	docker kill double-tap
+	docker kill $(image-name)
 
 #########################
 # build the docker images
@@ -121,7 +122,7 @@ ensure-logs:
 clean:
 	rm -rf build_logs
 	rm -rf .kube
-	rm -f double-tap-*.tgz
+	rm -f triple-play-*.tgz
 
 deep-clean: clean
 	rm -rf node_modules

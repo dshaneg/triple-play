@@ -1,6 +1,7 @@
-# double tap
+# triple play
 
 Proof of concept for creating a "workspace" container to be published along with the application's main container.
+Alternate multi-git-repository option based on [double-tap](https://github.com/dshaneg/double-tap)
 
 The workspace container can be used to run deploy and test scripts against the main container.
 

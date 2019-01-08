@@ -13,21 +13,21 @@ and then execute against the service endpoint with kubectl exec.
 ```sh
 # get the cluster-ip of your service by executing this line
 # (also, just replace $(id -un) with your username--you can probably type it quicker)
-kubectl get services double-tap-local-$(id -un)-service
+kubectl get services triple-play-local-$(id -un)-service
 
 kubectl exec -it curl curl http://{cluster-ip-of-your-service}
 
-kubectl get services double-tap-local-$(id -un)-service -o jsonpath='{spec.clusterIP}'
+kubectl get services triple-play-local-$(id -un)-service -o jsonpath='{spec.clusterIP}'
 
 # ...or if you're copy/pasting anyway, just do this
 # (played with an xargs version but couldn't get it to not show the download progress)
-clusterip=$(kubectl get services double-tap-local-$(id -un)-service -o jsonpath='{.spec.clusterIP}') && kubectl exec -it curl curl ${clusterip}
+clusterip=$(kubectl get services triple-play-local-$(id -un)-service -o jsonpath='{.spec.clusterIP}') && kubectl exec -it curl curl ${clusterip}
 ```
 
 Alternatively, you can use port forwarding instead of creating a spy pod.
 
 ```sh
-kubectl port-forward deploy/double-tap-local-$(id -un) 8001:80
+kubectl port-forward deploy/triple-play-local-$(id -un) 8001:80
 ```
 
 Then you can access the service from localhost.

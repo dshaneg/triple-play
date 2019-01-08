@@ -28,6 +28,6 @@ spec:
 #     - 'curl'
 #     - '$(echo "{{ .Release.Name }}-service" | tr [a-z] [A-Z] | tr [-] [_]):{{ .Values.infra.servicePort }}" | tr [a-z] [A-Z])'
 
-# echo double-tap-aat-service | tr [a-z] [A-Z]
+# echo triple-play-aat-service | tr [a-z] [A-Z]
 # DOUBLE_TAP_AAT_SERVICE_SERVICE_HOST=10.106.212.58
 # DOUBLE_TAP_AAT_SERVICE_SERVICE_PORT=80

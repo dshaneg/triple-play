@@ -8,7 +8,7 @@ set -eo pipefail
 # - STAGE: set to the proper stage name--drives which configuration file overides you get. See ./config directory (e.g. cert, prod, etc.)
 OWNER=dshaneg # probably should drive this value from the robot
 
-APP_NAME=double-tap
+APP_NAME=triple-play
 
 # set APP_VERSION to default value if not set already--robots should set this value before calling
 source abin/ensure-version-vars.sh
@@ -43,7 +43,7 @@ helm upgrade --install \
   --set meta.instance=${INSTANCE} \
   --set meta.owner=${OWNER} \
   ${RELEASE} \
-  double-tap-${CHART_VERSION}.tgz
+  triple-play-${CHART_VERSION}.tgz
 
 # TODO: add --versbose if the feature ever gets completed.
 # the --versbose option should show the output of the test command

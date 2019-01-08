@@ -10,7 +10,7 @@ source abin/ensure-version-vars.sh
 
 echo "Tagging and publishing images..."
 
-CONTAINER_NAME=double-tap
+CONTAINER_NAME=triple-play
 REPOSITORY=dshaneg
 APP_TAG=${REPOSITORY}/${CONTAINER_NAME}:${APP_VERSION}
 DEPLOY_TAG=${APP_TAG}.deploy

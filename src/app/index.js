@@ -3,7 +3,7 @@ const os = require('os');
 const bunyan = require('bunyan');
 const config = require('../../config/config.json');
 
-const log = bunyan.createLogger({ name: 'double-tap' });
+const log = bunyan.createLogger({ name: 'triple-play' });
 
 const server = http.createServer((request, response) => {
   response.writeHead(200, { 'Content-Type': 'text/plain' });

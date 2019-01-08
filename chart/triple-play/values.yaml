@@ -1,6 +1,6 @@
 docker:
   registry: dshaneg
-  image: double-tap
+  image: triple-play
   tag: latest
 
 meta:
