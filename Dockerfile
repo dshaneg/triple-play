@@ -48,6 +48,8 @@ COPY src src/
 
 RUN ./abin/build.sh
 
+ENTRYPOINT ["bash"]
+
 # ----------------------------------------------------------------------------------------------------------
 # -- Prerelease
 # ----------------------------------------------------------------------------------------------------------
@@ -60,9 +62,8 @@ RUN npm prune --production
 # ----------------------------------------------------------------------------------------------------------
 # -- Deploy (we'll publish this one)
 # ----------------------------------------------------------------------------------------------------------
-# contains the deploy and test scripts
-# used to deploy and test the application in any environment
-# will likely need to bring back node:alpine when we get to executing tests
+# contains the deploy script and the helm chart package
+# used to deploy in any environment
 FROM alpine:3.8 as deploy
 
 RUN apk add --no-cache ca-certificates bash
@@ -90,6 +91,28 @@ COPY --from=build /app/*.tgz ./
 CMD ["./abin/deploy.sh"]
 
 # ----------------------------------------------------------------------------------------------------------
+# -- Test (we'll publish this one)
+# ----------------------------------------------------------------------------------------------------------
+FROM node:10.15.0-alpine AS test
+
+RUN apk add --no-cache ca-certificates bash
+
+# Create app directory
+WORKDIR /app
+
+# dev dependencies for test tooling.
+# what if we had a separate package.json just for the tests? Woudldn't need the production dependencies in the image...
+# but that would cause us to have to npm install twice--though the dependencies should be cached after the first pull
+COPY --from=build /app/node_modules ./node_modules/
+COPY --from=build /app/abin/tests abin/tests
+COPY --from=build /app/src/tests ./src/tests/
+
+# Be sure to set required environment variables (they default to local developer values)
+# - APP_VERSION: set to the tag name of the application image you want to deploy
+# - STAGE: set to the proper stage name--drives which configuration file overides you get. See ./config directory (e.g. cert, prod, etc.)
+CMD [ "bash" ]
+
+# ----------------------------------------------------------------------------------------------------------
 # -- Release (we'll publish this one)
 # ----------------------------------------------------------------------------------------------------------
 FROM node:10.15.0-alpine AS release
@@ -98,8 +121,8 @@ FROM node:10.15.0-alpine AS release
 WORKDIR /app
 
 # production dependencies
-COPY --from=prerelease /app/node_modules ./node_modules/
 COPY --from=prerelease /app/package.json ./
+COPY --from=prerelease /app/node_modules ./node_modules/
 COPY --from=prerelease /app/src ./src/
 
 # exposes a port (default 80) but it is configurable
