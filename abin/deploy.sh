@@ -30,9 +30,9 @@ else
   NAMESPACE=default
 fi
 
-set -x
-
 RELEASE=${APP_NAME}-${INSTANCE}
+
+set -x
 
 helm upgrade --install \
   --wait \
@@ -45,4 +45,29 @@ helm upgrade --install \
   ${RELEASE} \
   double-tap-${CHART_VERSION}.tgz
 
-helm test ${RELEASE} --cleanup
+# TODO: add --versbose if the feature ever gets completed.
+# the --versbose option should show the output of the test command
+# https://github.com/helm/helm/issues/1957
+# once the verbose feature is working, the command should look like
+# helm test ${RELEASE} --verbose --cleanup
+# and the script following the helm test command should be able to be removed
+
+set +e
+
+helm test ${RELEASE}
+
+set +x
+
+test_pods=$(helm status ${RELEASE} -o json | jq -r .info.status.last_test_suite_run.results[].name)
+namespace=$(helm status ${RELEASE} -o json | jq -r .namespace)
+
+for test_pod in $test_pods; do
+  echo "Test Pod: ${test_pod}"
+  echo "============="
+  echo ""
+  kubectl -n ${namespace} logs ${test_pod}
+  kubectl -n ${namespace} delete pod ${test_pod}
+  echo ""
+  echo "============="
+done
+

@@ -57,7 +57,7 @@ ENTRYPOINT ["bash"]
 # used to deploy in any environment
 FROM alpine:3.8 as deploy
 
-RUN apk add --no-cache ca-certificates bash
+RUN apk add --no-cache ca-certificates bash jq
 
 # Note: Latest version of kubectl may be found at:
 # https://aur.archlinux.org/packages/kubectl-bin/
@@ -86,7 +86,7 @@ CMD ["./abin/deploy.sh"]
 # ----------------------------------------------------------------------------------------------------------
 FROM node:10.15.0-alpine AS test
 
-RUN apk add --no-cache ca-certificates bash
+RUN apk add --no-cache ca-certificates bash jq
 
 # Create app directory
 WORKDIR /app

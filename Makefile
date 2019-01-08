@@ -116,3 +116,4 @@ deep-clean: clean
 
 set-executable:
 	chmod 755 ./abin/*.sh
+	chmod 755 ./abin/tests/*.sh
