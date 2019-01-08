@@ -54,7 +54,7 @@ On a build server, you need to make sure the environment variable `STAGE` is set
 
 Both variables use default values if not set, but any automation should explicitly set values for these variables--the defaults are intended for local development.
 
-__BE CAREFUL__ when running this step locally if you have kubernetes credentials to any higher environment clusters (like production). Make sure your current context is set to a local or dev cluster. The process copies your kube config into the deployer container and lets it fly.
+__BE CAREFUL__ when running this step locally if you have kubernetes credentials to any higher environment clusters (like production). Make sure your current context is set to a local or dev cluster. The process copies your kube config into the deploy container and lets it fly.
 
 ```sh
 make deploy

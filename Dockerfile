@@ -58,12 +58,12 @@ FROM build as prerelease
 RUN npm prune --production
 
 # ----------------------------------------------------------------------------------------------------------
-# -- Deployer (we'll publish this one)
+# -- Deploy (we'll publish this one)
 # ----------------------------------------------------------------------------------------------------------
 # contains the deploy and test scripts
 # used to deploy and test the application in any environment
 # will likely need to bring back node:alpine when we get to executing tests
-FROM alpine:3.8 as deployer
+FROM alpine:3.8 as deploy
 
 RUN apk add --no-cache ca-certificates bash
 

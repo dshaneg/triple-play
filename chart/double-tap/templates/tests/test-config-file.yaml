@@ -18,7 +18,7 @@ spec:
 
 # trying to convert the known values into the env vars that get injected into the pods.
 # I think it might be better to pubish a third container that contains the tests and use that...
-# OR could possibly use the deployer container since it already has the tests
+# OR could possibly use the deploy container since it already has the tests
 #
 #     command: ['sh']
 #     args: 
