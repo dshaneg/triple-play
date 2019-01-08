@@ -3,20 +3,6 @@
 # ----------------------------------------------------------------------------------------------------------
 FROM node:10.15.0-jessie AS base
 
-# install helm
-
-# This section (and the kube install later) was lifted from https://hub.docker.com/r/dtzar/helm-kubectl/dockerfile
-# helm is needed for the linting step in the build image
-
-# Note: Latest version of helm may be found at:
-# https://github.com/kubernetes/helm/releases
-ENV HELM_VERSION="v2.12.1"
-
-RUN wget -q https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz -O - | tar -xzO linux-amd64/helm > /usr/local/bin/helm \
-  && chmod +x /usr/local/bin/helm
-
-RUN helm init --client-only
-
 # Create app directory
 WORKDIR /app
 
@@ -41,7 +27,6 @@ ARG APP_VERSION
 RUN mkdir build_logs
 
 COPY .eslintrc.yaml ./
-COPY chart chart/
 COPY abin abin/
 COPY config config/
 COPY src src/
@@ -59,6 +44,8 @@ FROM alpine:3.8 as deploy
 
 RUN apk add --no-cache ca-certificates bash jq
 
+# This section was lifted from https://hub.docker.com/r/dtzar/helm-kubectl/dockerfile
+
 # Note: Latest version of kubectl may be found at:
 # https://aur.archlinux.org/packages/kubectl-bin/
 ENV KUBE_VERSION="v1.13.1"
@@ -67,14 +54,22 @@ ENV KUBE_VERSION="v1.13.1"
 RUN wget -q https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl \
   && chmod +x /usr/local/bin/kubectl
 
+# Note: Latest version of helm may be found at:
+# https://github.com/kubernetes/helm/releases
+ENV HELM_VERSION="v2.12.1"
+
+RUN wget -q https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz -O - | tar -xzO linux-amd64/helm > /usr/local/bin/helm \
+  && chmod +x /usr/local/bin/helm
+
+RUN helm init --client-only
+
+# need to 'helm repo add' with proper helm chart target and credentials
+
 # Create app directory
 WORKDIR /app
 
-COPY --from=build /usr/local/bin/helm /usr/local/bin/helm
-COPY --from=build /root/.helm /root/.helm/
 COPY --from=build /app/abin abin/
 COPY --from=build /app/config config/
-COPY --from=build /app/*.tgz ./
 
 # Be sure to set required environment variables (they default to local developer values)
 # - APP_VERSION: set to the tag name of the application image you want to deploy
