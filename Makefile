@@ -4,6 +4,10 @@
 
 image-name = double-tap
 
+################
+# Pipeline rules
+################
+
 # execute the application build as part of building the image
 # then copy the build logs from the container to the host
 build: clean dbuild-build dbuild-deploy dbuild-test dbuild-release
@@ -17,6 +21,21 @@ build: clean dbuild-build dbuild-deploy dbuild-test dbuild-release
 # no dependencies--assumes build rule has been run but doesn't force it
 publish: set-executable
 	abin/publish.sh
+
+# execute deploy script in the deploy container
+deploy: set-executable
+	# would need a step to retrieve kubernetes config file from a secret store
+	docker run \
+		--rm \
+		-it \
+		-e STAGE \
+		-e APP_VERSION \
+		--mount type=bind,source=${HOME}/.kube,target=//root/.kube \
+		double-tap:deploy
+
+######################
+# Manual testing rules
+######################
 
 # enter a bash shell in the build container
 # assumes build has already run--doesn't force a new one
@@ -34,17 +53,6 @@ playtest:
 		-it \
 		$(image-name):test
 
-# execute deploy script in the deploy container
-deploy: set-executable
-	# would need a step to retrieve kubernetes config file from a secret store
-	docker run \
-		--rm \
-		-it \
-		-e STAGE \
-		-e APP_VERSION \
-		--mount type=bind,source=${HOME}/.kube,target=//root/.kube \
-		double-tap:deploy
-
 # execute the release container locally
 # assumes build has already run--doesn't force a new one
 run:
@@ -60,7 +68,9 @@ run:
 kill:
 	docker kill double-tap
 
+#########################
 # build the docker images
+#########################
 
 dbuild-build: ensure-logs set-executable
 	@echo "\n***************************************************************"
@@ -101,7 +111,9 @@ dbuild-release: ensure-logs set-executable
 		-t $(image-name):latest \
 		.
 
+###############
 # utility rules
+###############
 
 ensure-logs:
 	mkdir -p build_logs
