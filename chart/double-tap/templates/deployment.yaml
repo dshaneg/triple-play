@@ -11,7 +11,7 @@ metadata:
     app.kubernetes.io/part-of: {{ .Chart.Name }}
     app.kubernetes.io/managed-by: helm
     stage: {{ .Values.meta.stage }}
-    owner: {{ .Values.meta.owner}}
+    owner: {{ .Values.meta.owner }}
 spec:
   replicas: {{ .Values.infra.scaling.startReplicas }}
   selector:
@@ -29,7 +29,7 @@ spec:
         app.kubernetes.io/part-of: {{ .Chart.Name }}
         app.kubernetes.io/managed-by: helm
         stage: {{ .Values.meta.stage }}
-        owner: {{ .Values.meta.owner}}
+        owner: {{ .Values.meta.owner }}
     spec:
       containers:
       - image: {{ .Values.docker.registry }}/{{ .Values.docker.image }}:{{ .Values.docker.tag }}
